@@ -1,0 +1,29 @@
+{
+    "name": "20steps/bricks-demo-angularjs",
+    "type": "symfony-bundle",
+    "description": "Symfony bundle for demo application.",
+    "keywords": ["Symfony2", "Bricks", "AngularJs"],
+    "license": "commercial",
+    "authors": [
+        {
+            "name": "Helmut Hoffer von Ankershoffen",
+            "email": "hhva@20steps.de",
+            "homepage": "http://20steps.de"
+        },
+        {
+            "name": "Daniel Boberg",
+            "email": "daniel@20steps.de",
+            "homepage": "http://20steps.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "~2.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "twentysteps\\Bundle\\BricksDemoBundle": ""
+        }
+    },
+    "target-dir": "twentysteps/Bundle/BricksDemoBundle"
+}

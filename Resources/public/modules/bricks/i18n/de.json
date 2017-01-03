@@ -1,0 +1,17 @@
+{
+  "BRICKS": {
+    "APP": {
+      "BUTTONS": {
+        "OK": "Ok",
+        "CANCEL": "Abbrechen",
+        "PRINT": "Drucken",
+        "DOWNLOAD": "Herunterladen",
+        "CLOSE": "Schliessen",
+        "SAVE": "Speichern",
+        "SAVE_AND_EDIT": "Speichern und weiterbearbeiten",
+        "DELETE": "Löschen",
+        "SAVE_AND_PROVE": "Speichern und zur Prüfung einreichen"
+      }
+    }
+  }
+}

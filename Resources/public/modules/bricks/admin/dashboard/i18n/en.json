@@ -1,0 +1,16 @@
+{
+  "BRICKS": {
+    "ADMIN": {
+      "DASHBOARD": {
+        "STATISTICS": {
+          "USERS": {
+            "TOTAL": "Total users",
+            "PENDING": "Not yet activated",
+            "ACTIVE": "Activated",
+            "DISABLED": "Disabled"
+          }
+        }
+      }
+    }
+  }
+}

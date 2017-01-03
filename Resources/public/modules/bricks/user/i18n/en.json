@@ -1,0 +1,32 @@
+{
+  "BRICKS": {
+    "USER": {
+      "TYPE": {
+        "EDITOR": "Editor",
+        "ADMIN": "Admin"
+      },
+      "ROLE": {
+        "ROLE_DEMO_DEMO_EDITOR": "Editor",
+        "ROLE_DEMO_DEMO_ADMIN": "Admin"
+      },
+      "STATUS": {
+        "active": "activated",
+        "pending": "waiting for activation",
+        "disabled": "deactivated"
+      },
+      "SALUTATION": {
+        "mister": "Herr",
+        "misses": "Frau",
+        "doctor": "Doktor",
+        "professor": "Professor"
+      },
+      "GENDER": {
+        "1": "Woman",
+        "0": "Man"
+      },
+      "LAST_LOGIN": "Last login",
+      "INTERACTION_COUNT": "Anzahl Interaktionen",
+      "IS_ONLINE": "aktuell online"
+    }
+  }
+}

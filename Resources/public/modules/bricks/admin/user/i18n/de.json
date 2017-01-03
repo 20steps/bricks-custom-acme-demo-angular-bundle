@@ -1,0 +1,32 @@
+{
+  "BRICKS": {
+    "ADMIN": {
+      "USER": {
+        "LABELS": {
+          "REGISTERED_AT": "Registriert am",
+          "REGISTRATION_TYPE": "Registriert via",
+          "LAST_LOGIN": "Letzte Anmeldung",
+          "LAST_LOGIN_NEVER": "Noch nie",
+          "IS_ONLINE": "aktuell online",
+          "STATUS": "Status",
+          "ID": "ID",
+          "USERNAME": "Nutzername",
+          "DISPLAY_NAME": "Name",
+          "DISPLAY_NAME_PUBLIC": "Öffentlicher Name",
+          "AVATAR": "Profilbild",
+          "EMAIL": "E-Mail Adresse",
+          "DETAILS": "Details",
+          "TYPE": "Nutzertyp",
+          "SALUTATION": "Anrede",
+          "GENDER": "Geschlecht",
+          "STATISTIC_INTERACTION_COUNT": "Anzahl Interaktionen",
+          "INTERACTIONS": "Interaktionen",
+          "PREDICTION_BLACKLISTED_FOR_TRAINING": "Ausgeschlossen für Training der KI",
+          "CUSTOMER": "Kunde",
+          "INVITED_FROM": "Eingeladen von",
+          "INVITED_AT": "Eingeladen am"
+        }
+      }
+    }
+  }
+}

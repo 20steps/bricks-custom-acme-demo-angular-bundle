@@ -1,0 +1,11 @@
+{
+    "name": "BricksDemo",
+    "private": true,
+    "dependencies": {
+        "autobahn": "latest",
+        "angular-wamp": "latest",
+        "underscore": "latest",
+        "underscore.string": "2.4.0",
+        "ngGeolocation": "latest"
+    }
+}

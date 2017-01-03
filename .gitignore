@@ -1,0 +1,9 @@
+.DS_Store
+.idea/**
+*~ 
+*.bak
+
+# node_modules managed by npm, restore using "nmp install"
+node_modules/**
+
+# to restore everything simply call npm install which calls the others as post-install
