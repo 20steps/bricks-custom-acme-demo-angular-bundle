@@ -1,14 +1,11 @@
 'use strict';
 
-angular.module('bricks.notification',
-        [
-        ]
+angular.module('bricks.notification', []
     )
 
     // infrastructure configuration, primarily prefixes to keep DRY
     .constant('MODULE_BRICKS_NOTIFICATION', {
-        i18nPart: 'services',
-        templatePrefix: '/bundles/twentystepsbricksacmedemoangularjs/modules/bricks/notification/'
+        i18nPart: 'bricks/notification'
     })
 
     .config(['MODULE_BRICKS_NOTIFICATION', '$translatePartialLoaderProvider',
@@ -21,9 +18,7 @@ angular.module('bricks.notification',
     .run(['MODULE_BRICKS_NOTIFICATION','$translate','$log',
         function(MODULE_BRICKS_NOTIFICATION,$translate,$log) {
             //$translate.refresh();
-
             $log.debug('bricks.notification: run()');
-
         }]
     )
 
