@@ -721,8 +721,8 @@ angular.module('bricks.event')
                     var deferred = $q.defer();
                     bricksPublicRestangularService.one('event/event.json').get().then(function(result) {
                         $log.debug('EventService.getList succeeded: ', result);
-                        var page = result.data.page;
-                        deferred.resolve(page);
+                        var events = result.data.events;
+                        deferred.resolve(events);
                     }, function (error) {
                         $log.error('EventService.getList failed: ', error);
                         deferred.reject(error);
