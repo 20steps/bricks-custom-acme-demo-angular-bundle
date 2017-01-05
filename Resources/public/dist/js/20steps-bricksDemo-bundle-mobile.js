@@ -278,81 +278,6 @@ angular.module('bricks.admin.dashboard')
 ;
 'use strict';
 
-angular.module('bricks.user',
-        [
-        ]
-    )
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_USER', {
-        i18nPart: 'bricks/user',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/user/'
-    })
-
-    .config(['MODULE_BRICKS_USER', '$translatePartialLoaderProvider',
-        function (MODULE_BRICKS_USER,$translatePartialLoaderProvider) {
-            // load i18n translations from i18n subdirectory
-            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_USER.i18nPart);
-        }]
-    )
-
-    .run(['MODULE_BRICKS_USER','$translate','$log',
-        function(MODULE_BRICKS_USER,$translate,$log) {
-            //$translate.refresh();
-
-            $log.debug('bricks.user: run()');
-
-        }]
-    )
-
-;
-
-'use strict';
-
-angular.module('bricks.user')
-
-    .service('UserService',
-        ['MODULE_BRICKS_USER', '$log', '$rootScope', 'bricksPublicRestangularService', '$q', 'bricksAuthenticationService',
-            function (MODULE_BRICKS_USER, $log, $rootScope, bricksPublicRestangularService, $q, bricksAuthenticationService) {
-
-                $log.debug('UserService');
-
-                function findUserById(id) {
-                    $log.debug("UserService.findUserById",id);
-                    var deferred = $q.defer();
-
-                    bricksPublicRestangularService.one('user/id/'+id+'.json').get().then(function (result) {
-                        $log.debug('UserService.findUserById succeded: ', result);
-                        deferred.resolve(result.data.user);
-                    }, function (error) {
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                function findOneByUsername(username) {
-                    $log.debug("UserService.findOneByUsername",username);
-                    var deferred = $q.defer();
-
-                    bricksPublicRestangularService.one('user/username/'+username+'.json').get().then(function (result) {
-                        $log.debug('UserService.findOneByUsername succeded: ', result);
-                        deferred.resolve(result.data.user);
-                    }, function (error) {
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                return {
-                    findUserById: findUserById,
-                    findOneByUsername: findOneByUsername,
-                }
-            }
-        ]
-    )
-;
-'use strict';
-
 angular.module('bricks.wamp',
         [
         ]
@@ -538,6 +463,81 @@ angular.module('bricks.utils')
 );
 'use strict';
 
+angular.module('bricks.user',
+        [
+        ]
+    )
+
+    // infrastructure configuration, primarily prefixes to keep DRY
+    .constant('MODULE_BRICKS_USER', {
+        i18nPart: 'bricks/user',
+        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/user/'
+    })
+
+    .config(['MODULE_BRICKS_USER', '$translatePartialLoaderProvider',
+        function (MODULE_BRICKS_USER,$translatePartialLoaderProvider) {
+            // load i18n translations from i18n subdirectory
+            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_USER.i18nPart);
+        }]
+    )
+
+    .run(['MODULE_BRICKS_USER','$translate','$log',
+        function(MODULE_BRICKS_USER,$translate,$log) {
+            //$translate.refresh();
+
+            $log.debug('bricks.user: run()');
+
+        }]
+    )
+
+;
+
+'use strict';
+
+angular.module('bricks.user')
+
+    .service('UserService',
+        ['MODULE_BRICKS_USER', '$log', '$rootScope', 'bricksPublicRestangularService', '$q', 'bricksAuthenticationService',
+            function (MODULE_BRICKS_USER, $log, $rootScope, bricksPublicRestangularService, $q, bricksAuthenticationService) {
+
+                $log.debug('UserService');
+
+                function findUserById(id) {
+                    $log.debug("UserService.findUserById",id);
+                    var deferred = $q.defer();
+
+                    bricksPublicRestangularService.one('user/id/'+id+'.json').get().then(function (result) {
+                        $log.debug('UserService.findUserById succeded: ', result);
+                        deferred.resolve(result.data.user);
+                    }, function (error) {
+                        deferred.reject(error);
+                    });
+                    return deferred.promise;
+                }
+
+                function findOneByUsername(username) {
+                    $log.debug("UserService.findOneByUsername",username);
+                    var deferred = $q.defer();
+
+                    bricksPublicRestangularService.one('user/username/'+username+'.json').get().then(function (result) {
+                        $log.debug('UserService.findOneByUsername succeded: ', result);
+                        deferred.resolve(result.data.user);
+                    }, function (error) {
+                        deferred.reject(error);
+                    });
+                    return deferred.promise;
+                }
+
+                return {
+                    findUserById: findUserById,
+                    findOneByUsername: findOneByUsername,
+                }
+            }
+        ]
+    )
+;
+'use strict';
+
 angular.module('bricks.notification', []
     )
 
@@ -606,9 +606,9 @@ angular.module('bricks.notification')
 
                 function showNotificationByKey(key,sref,autoclose) {
                     showNotification(
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ALERT'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.BODY'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ICON'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.ALERT'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.BODY'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.ICON'),
                         sref,
                         autoclose
                     );

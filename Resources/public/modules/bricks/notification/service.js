@@ -42,9 +42,9 @@ angular.module('bricks.notification')
 
                 function showNotificationByKey(key,sref,autoclose) {
                     showNotification(
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ALERT'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.BODY'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ICON'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.ALERT'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.BODY'),
+                        $translate.instant('BRICKS.NOTIFICATION.'+key+'.ICON'),
                         sref,
                         autoclose
                     );
