@@ -2,8 +2,8 @@
 
 angular.module('bricks.event')
     .service('EventService',
-        ['MODULE_BRICKS_EVENT', '$log', '$translate', 'bricksPublicRestangularService', '$q', 'bricksContentService',
-            function (MODULE_BRICKS_EVENT, $log, $translate, bricksPublicRestangularService, $q, bricksContentService) {
+        ['MODULE_BRICKS_EVENT', '$log', '$translate', 'bricksPublicRestangularService', '$q',
+            function (MODULE_BRICKS_EVENT, $log, $translate, bricksPublicRestangularService, $q) {
 
                 $log.debug('EventService');
 
@@ -11,7 +11,7 @@ angular.module('bricks.event')
                     $log.debug('EventService.getList');
 
                     var deferred = $q.defer();
-                    bricksPublicRestangularService.one('event/event.json').get(context).then(function(result) {
+                    bricksPublicRestangularService.one('event/event.json').get().then(function(result) {
                         $log.debug('EventService.getList succeeded: ', result);
                         var page = result.data.page;
                         deferred.resolve(page);

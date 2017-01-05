@@ -30,8 +30,7 @@ var conf = {
         "Resources/public/components/underscore.string/dist/underscore.string.min.js",
         "Resources/public/modules/**/*.js"
     ],
-    jsFilesWeb: [],
-    jsFilesMobile: [],
+    jsFiles: [],
     i18nDistDir: './Resources/public/dist/i18n',
     i18nFilesEn: [
         './Resources/public/modules/**/en.json'
@@ -46,24 +45,16 @@ var conf = {
 };
 
 // default task (executed when calling gulp without parameters)
-gulp.task('default', ['i18n-en','i18n-de','bundle-web-js','bundle-mobile-js', 'contrib_css']);
-gulp.task('prod', ['i18n-en','i18n-de','bundle-web-js','bundle-web-prod-js','bundle-mobile-js','bundle-mobile-prod-js', 'contrib_css']);
+gulp.task('default', ['i18n-en','i18n-de','bundle-js', 'contrib_css']);
+gulp.task('prod', ['i18n-en','i18n-de','bundle-js','bundle-prod-js', 'contrib_css']);
 
 // subtasks
-gulp.task('bundle-web-js', function () {
-    return build('20steps-bricksDemo-bundle-web.js',conf.jsFilesShared.concat(conf.jsFilesWeb),false);
+gulp.task('bundle-js', function () {
+    return build('bricks-custom-acme-demo-angularjs.js',conf.jsFilesShared.concat(conf.jsFiles),false);
 });
 
-gulp.task('bundle-web-prod-js', function () {
-    return build('20steps-bricksDemo-bundle-web.prod.js',conf.jsFilesShared.concat(conf.jsFilesWeb),true);
-});
-
-gulp.task('bundle-mobile-js', function () {
-    return build('20steps-bricksDemo-bundle-mobile.js',conf.jsFilesShared.concat(conf.jsFilesWeb, conf.jsFilesMobile),false);
-});
-
-gulp.task('bundle-mobile-prod-js', function () {
-    return build('20steps-bricksDemo-bundle-mobile.prod.js',conf.jsFilesShared.concat(conf.jsFilesWeb, conf.jsFilesMobile),true);
+gulp.task('bundle-prod-js', function () {
+    return build('bricks-custom-acme-demo-angularjs.prod.js',conf.jsFilesShared.concat(conf.jsFiles),true);
 });
 
 // combine and minify css of contrib
@@ -97,8 +88,7 @@ gulp.task('i18n-en', function () {
 gulp.task('watch', function() {
     gulp.watch(conf.i18nFilesDe,['i18n-de']);
     gulp.watch(conf.i18nFilesEn,['i18n-en']);
-    gulp.watch(conf.jsFilesShared.concat(conf.jsFilesWeb),['bundle-web-js']);
-    gulp.watch(conf.jsFilesShared.concat(conf.jsFilesMobile),['bundle-mobile-js']);
+    gulp.watch(conf.jsFilesShared.concat(conf.jsFiles),['bundle-js']);
 });
 
 // helper functions

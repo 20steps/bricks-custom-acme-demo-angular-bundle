@@ -4,6 +4,7 @@ angular.module('bricks.app',
         [
             'bricks.app.admin',
             'bricks.content',
+            'bricks.event',
             'bricks.notification',
             'bricks.user',
             'bricks.utils',
