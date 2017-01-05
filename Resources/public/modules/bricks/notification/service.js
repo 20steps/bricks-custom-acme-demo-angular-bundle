@@ -3,8 +3,8 @@
 angular.module('bricks.notification')
 
     .service('NotificationService',
-        ['MODULE_BRICKS_APP_NOTIFICATION', '$log', '$rootScope', 'webNotification','$interval', '$translate', '$state', '$window',
-            function (MODULE_BRICKS_APP_NOTIFICATION, $log, $rootScope, webNotification, $interval, $translate, $state, $window) {
+        ['MODULE_BRICKS_NOTIFICATION', '$log', '$rootScope', 'webNotification','$interval', '$translate', '$state', '$window',
+            function (MODULE_BRICKS_NOTIFICATION, $log, $rootScope, webNotification, $interval, $translate, $state, $window) {
 
                 $log.debug('NotificationService');
 
