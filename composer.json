@@ -22,8 +22,8 @@
     },
     "autoload": {
         "psr-0": {
-            "twentysteps\\Bundle\\BricksDemoBundle": ""
+            "twentysteps\\Bundle\\BricksCustomAcmeDemoAngularBundle": ""
         }
     },
-    "target-dir": "twentysteps/Bundle/BricksDemoBundle"
+    "target-dir": "twentysteps/Bundle/BricksCustomAcmeDemoAngularBundle"
 }

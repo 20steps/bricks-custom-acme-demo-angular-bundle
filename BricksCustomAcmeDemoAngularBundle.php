@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-namespace twentysteps\Bundle\BricksDemoBundle;
+namespace twentysteps\Bundle\BricksCustomAcmeDemoAngularBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
