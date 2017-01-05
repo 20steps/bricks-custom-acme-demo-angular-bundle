@@ -2,11 +2,12 @@
 
 angular.module('bricks.app',
         [
-            'bricks.user',
             'bricks.app.admin',
-            'bricks.newsletter',
+            'bricks.content',
+            'bricks.notification',
+            'bricks.user',
             'bricks.utils',
-            'bricks.content'
+            'bricks.wamp'
         ]
     )
 

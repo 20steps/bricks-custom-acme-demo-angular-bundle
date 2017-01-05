@@ -1,0 +1,16 @@
+{
+  "BRICKS": {
+    "NOTIFICATION": {
+      "USER_LOGGED_IN": {
+        "ALERT": "Sie sind angemeldet.",
+        "BODY": "Viel Spaß!",
+        "ICON": "/bundles/brickscustomacmedemo/SPA/modules/app/images/icons/notification_logo.png"
+      },
+      "USER_LOGGED_OUT": {
+        "ALERT": "Sie wurden abgemeldet.",
+        "BODY": "Kommen Sie bald wieder!",
+        "ICON": "/bundles/brickscustomacmedemo/SPA/modules/app/images/icons/notification_logo.png"
+      }
+    }
+  }
+}

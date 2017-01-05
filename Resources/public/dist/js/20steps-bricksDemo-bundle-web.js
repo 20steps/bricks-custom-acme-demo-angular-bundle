@@ -278,55 +278,6 @@ angular.module('bricks.admin.dashboard')
 ;
 'use strict';
 
-angular.module('bricks.utils',
-        [
-            'ngSanitize'
-        ]
-    )
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_UTILS', {
-        i18nPart: 'bricks/utils',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/utils/'
-    })
-
-    .config(['MODULE_BRICKS_UTILS', '$translatePartialLoaderProvider',
-        function (MODULE_BRICKS_UTILS,$translatePartialLoaderProvider) {
-            // load i18n translations from i18n subdirectory
-            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_UTILS.i18nPart);
-        }]
-    )
-
-    .run(['MODULE_BRICKS_UTILS','$translate','$log',
-        function(MODULE_BRICKS_UTILS,$translate,$log) {
-            //$translate.refresh();
-
-            $log.debug('bricks.utils: run()');
-
-        }]
-    )
-
-;
-
-angular.module('bricks.utils')
-    .filter('highlight', function () {
-        return function (text, search, caseSensitive) {
-            if (text && (search || angular.isNumber(search))) {
-                text = text.toString();
-                search = search.toString();
-                if (caseSensitive) {
-                    return text.split(search).join('<span class="bricks-highlight">' + search + '</span>');
-                } else {
-                    return text.replace(new RegExp(search, 'gi'), '<span class="bricks-highlight">$&</span>');
-                }
-            } else {
-                return text;
-            }
-        }
-    }
-);
-'use strict';
-
 angular.module('bricks.wamp',
         [
         ]
@@ -463,6 +414,55 @@ angular.module('bricks.wamp',
 
 'use strict';
 
+angular.module('bricks.utils',
+        [
+            'ngSanitize'
+        ]
+    )
+
+    // infrastructure configuration, primarily prefixes to keep DRY
+    .constant('MODULE_BRICKS_UTILS', {
+        i18nPart: 'bricks/utils',
+        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/utils/'
+    })
+
+    .config(['MODULE_BRICKS_UTILS', '$translatePartialLoaderProvider',
+        function (MODULE_BRICKS_UTILS,$translatePartialLoaderProvider) {
+            // load i18n translations from i18n subdirectory
+            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_UTILS.i18nPart);
+        }]
+    )
+
+    .run(['MODULE_BRICKS_UTILS','$translate','$log',
+        function(MODULE_BRICKS_UTILS,$translate,$log) {
+            //$translate.refresh();
+
+            $log.debug('bricks.utils: run()');
+
+        }]
+    )
+
+;
+
+angular.module('bricks.utils')
+    .filter('highlight', function () {
+        return function (text, search, caseSensitive) {
+            if (text && (search || angular.isNumber(search))) {
+                text = text.toString();
+                search = search.toString();
+                if (caseSensitive) {
+                    return text.split(search).join('<span class="bricks-highlight">' + search + '</span>');
+                } else {
+                    return text.replace(new RegExp(search, 'gi'), '<span class="bricks-highlight">$&</span>');
+                }
+            } else {
+                return text;
+            }
+        }
+    }
+);
+'use strict';
+
 angular.module('bricks.user',
         [
         ]
@@ -538,64 +538,158 @@ angular.module('bricks.user')
 ;
 'use strict';
 
-angular.module('bricks.newsletter',
+angular.module('bricks.notification')
+
+    .service('NotificationService',
+        ['MODULE_BRICKS_APP_NOTIFICATION', '$log', '$rootScope', 'webNotification','$interval', '$translate', '$state', '$window',
+            function (MODULE_BRICKS_APP_NOTIFICATION, $log, $rootScope, webNotification, $interval, $translate, $state, $window) {
+
+                $log.debug('NotificationService');
+
+                function showNotification(alert,body,icon,sref,autoclose,url) {
+                    body = body || "";
+                    icon = icon || "/favicon.ico";
+                    sref = sref || null;
+                    autoclose = autoclose || 100000;
+                    url = url || null;
+                    $log.debug('NotificationService.showNotification',alert,body,icon,sref,autoclose,url);
+                    webNotification.showNotification(alert, {
+                        body: body,
+                        icon: icon,
+                        onClick: function onNotificationClicked() {
+                            $log.debug('NotificationService.showNotification: notification clicked');
+                            if (sref) {
+                                $log.debug('NotificationService.showNotification: going to sref',sref);
+                                $state.go(sref);
+                            } else if (url) {
+                                $log.debug('NotificationService.showNotification: going url',url);
+                                $window.open(url,'_blank');
+                            }
+                        },
+                        autoClose: autoclose
+                    }, function onShow(error, hide) {
+                        $log.debug('NotificationService.showNotification: onShow');
+                        if (error) {
+                            $log.error('NotificationService.showNotification: onShow with error',error);
+                            hide();
+                        } else {
+                            $log.debug('NotificationService.showNotification: onShow no error')
+                        }
+                    });
+                }
+
+                function showNotificationByKey(key,sref,autoclose) {
+                    showNotification(
+                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ALERT'),
+                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.BODY'),
+                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ICON'),
+                        sref,
+                        autoclose
+                    );
+                }
+
+                // initialization
+
+                function initListeners() {
+                    $log.debug('NotificationService.initListeners');
+
+                    // login of user
+                    $rootScope.$on('user-logged-in',function() {
+                        $log.debug('NotificationService.$on user-logged-in');
+                        showNotificationByKey('USER_LOGGED_IN');
+                    });
+
+                    // logout of user
+                    $rootScope.$on('user-logged-out',function() {
+                        $log.debug('NotificationService.$on user-logged-out');
+                        showNotificationByKey('USER_LOGGED_OUT');
+                    });
+
+                    // message received via WAMP
+                    $rootScope.$on('wamp-message-received',function(event,args) {
+                        $log.debug('NotificationService.$on wamp-message-received',args);
+                        var topic = args.topic;
+                        if (topic == 'general' || topic == 'personal' || topic == 'group') {
+                            $log.debug('NotificationService.$on wamp-message-received: will show message as Desktop notification');
+                            var message = args.message;
+                            if (message && _.has(message,'text')) {
+                                var text = message.text;
+                                var body = null;
+                                var sref = null;
+                                var icon = null;
+                                var autoclose = 100000;
+                                var url = null;
+                                if (_.has(message,'custom')) {
+                                    if (_.has(message.custom, 'translation')) {
+                                        body = _.has(message.custom.translation,'body')?$translate.instant(messsage.custom.translation.body):null;
+                                        text = _.has(message.custom.translation,'text')?$translate.instant(messsage.custom.translation.text):null;
+                                        icon = _.has(message.custom.translation,'icon')?$translate.instant(messsage.custom.translation.icon):null;
+                                    }
+                                    if (!body) {
+                                        body = _.has(message.custom, 'body') ? message.custom.body : body;
+                                    }
+                                    if (!icon) {
+                                        icon = _.has(message.custom, 'icon') ? message.custom.icon : icon;
+                                    }
+                                    sref = _.has(message.custom, 'sref') ? message.custom.sref : sref;
+                                    autoclose = _.has(message.custom, 'autoclose') ? message.custom.autoclose : autclose;
+                                    url = _.has(message.custom, 'url') ? message.custom.url : url;
+                                }
+                                showNotification(text,body,icon,sref,autoclose,url);
+                            }
+                        } else {
+                            $log.debug('NotificationService.$on wamp-message-received: ignoring message');
+                        }
+                    })
+                }
+
+                function init() {
+                    $log.debug('NotificationService.init');
+                    initListeners();
+                }
+
+                // helpers
+
+                init();
+
+                // public interface
+                return {
+                    showNotification: showNotification
+                }
+            }
+        ])
+;
+'use strict';
+
+angular.module('bricks.app.notification',
         [
         ]
     )
 
     // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_NEWSLETTER', {
-        i18nPart: 'bricks/newsletter',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/newsletter/'
+    .constant('MODULE_BRICKS_APP_NOTIFICATION', {
+        i18nPart: 'services',
+        templatePrefix: '/bundles/twentystepsbricksacmedemoangularjs/modules/bricks/notification/'
     })
 
-    .config(['MODULE_BRICKS_NEWSLETTER', '$translatePartialLoaderProvider',
-        function (MODULE_BRICKS_NEWSLETTER,$translatePartialLoaderProvider) {
+    .config(['MODULE_BRICKS_APP_NOTIFICATION', '$translatePartialLoaderProvider',
+        function (MODULE_BRICKS_APP_NOTIFICATION,$translatePartialLoaderProvider) {
             // load i18n translations from i18n subdirectory
-            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_NEWSLETTER.i18nPart);
+            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_APP_NOTIFICATION.i18nPart);
         }]
     )
 
-    .run(['MODULE_BRICKS_NEWSLETTER','$translate','$log',
-        function(MODULE_BRICKS_NEWSLETTER,$translate,$log) {
+    .run(['MODULE_BRICKS_APP_NOTIFICATION','$translate','$log',
+        function(MODULE_BRICKS_APP_NOTIFICATION,$translate,$log) {
             //$translate.refresh();
 
-            $log.debug('bricks.newsletter: run()');
+            $log.debug('bricks.app.notification: run()');
 
         }]
     )
 
 ;
 
-'use strict';
-
-angular.module('bricks.newsletter')
-
-    .service('NewsletterService',
-        ['MODULE_BRICKS_NEWSLETTER', '$log', '$rootScope', 'bricksKernel', 'bricksPublicRestangularService', 'bricksAuthenticatedRestangularService', '$q',
-            function (MODULE_BRICKS_NEWSLETTER, $log, $rootScope, bricksKernel, bricksPublicRestangularService, bricksAuthenticatedRestangularService, $q) {
-
-                $log.debug('NewsletterService');
-
-                function subscribe(registration) {
-                    $log.debug('NewsletterService.subscribe',registration);
-                    var deferred = $q.defer();
-                    bricksPublicRestangularService.one('/newsletter/subscribe.json').customPOST(registration).then(function (result) {
-                        $log.debug('NewsletterService.subscribe succeeded',result);
-                        deferred.resolve(result.data.flash);
-                    }, function (error) {
-                        $log.error('NewsletterService.subscribe failed', error);
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                return {
-                    subscribe: subscribe
-                }
-            }
-        ])
-;
 'use strict';
 
 angular.module('bricks.content', [])
@@ -772,11 +866,12 @@ angular.module('bricks.app.admin',
 
 angular.module('bricks.app',
         [
-            'bricks.user',
             'bricks.app.admin',
-            'bricks.newsletter',
+            'bricks.content',
+            'bricks.notification',
+            'bricks.user',
             'bricks.utils',
-            'bricks.content'
+            'bricks.wamp'
         ]
     )
 
