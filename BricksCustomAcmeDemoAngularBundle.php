@@ -1,6 +1,6 @@
 <?php
 /**
- * BricksDemoBundle
+ * BricksCustomAcmeDemoAngularBundle
  * Copyright (c) 2015, 20steps Digital Full Service Boutique, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -21,5 +21,5 @@ namespace twentysteps\Bundle\BricksDemoBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class twentystepsBricksDemoBundle extends Bundle {
+class BricksCustomAcmeDemoAngularBundle extends Bundle {
 }

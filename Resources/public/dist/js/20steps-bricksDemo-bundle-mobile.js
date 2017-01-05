@@ -278,6 +278,55 @@ angular.module('bricks.admin.dashboard')
 ;
 'use strict';
 
+angular.module('bricks.utils',
+        [
+            'ngSanitize'
+        ]
+    )
+
+    // infrastructure configuration, primarily prefixes to keep DRY
+    .constant('MODULE_BRICKS_UTILS', {
+        i18nPart: 'bricks/utils',
+        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/utils/'
+    })
+
+    .config(['MODULE_BRICKS_UTILS', '$translatePartialLoaderProvider',
+        function (MODULE_BRICKS_UTILS,$translatePartialLoaderProvider) {
+            // load i18n translations from i18n subdirectory
+            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_UTILS.i18nPart);
+        }]
+    )
+
+    .run(['MODULE_BRICKS_UTILS','$translate','$log',
+        function(MODULE_BRICKS_UTILS,$translate,$log) {
+            //$translate.refresh();
+
+            $log.debug('bricks.utils: run()');
+
+        }]
+    )
+
+;
+
+angular.module('bricks.utils')
+    .filter('highlight', function () {
+        return function (text, search, caseSensitive) {
+            if (text && (search || angular.isNumber(search))) {
+                text = text.toString();
+                search = search.toString();
+                if (caseSensitive) {
+                    return text.split(search).join('<span class="bricks-highlight">' + search + '</span>');
+                } else {
+                    return text.replace(new RegExp(search, 'gi'), '<span class="bricks-highlight">$&</span>');
+                }
+            } else {
+                return text;
+            }
+        }
+    }
+);
+'use strict';
+
 angular.module('bricks.wamp',
         [
         ]
@@ -414,55 +463,6 @@ angular.module('bricks.wamp',
 
 'use strict';
 
-angular.module('bricks.utils',
-        [
-            'ngSanitize'
-        ]
-    )
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_UTILS', {
-        i18nPart: 'bricks/utils',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/utils/'
-    })
-
-    .config(['MODULE_BRICKS_UTILS', '$translatePartialLoaderProvider',
-        function (MODULE_BRICKS_UTILS,$translatePartialLoaderProvider) {
-            // load i18n translations from i18n subdirectory
-            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_UTILS.i18nPart);
-        }]
-    )
-
-    .run(['MODULE_BRICKS_UTILS','$translate','$log',
-        function(MODULE_BRICKS_UTILS,$translate,$log) {
-            //$translate.refresh();
-
-            $log.debug('bricks.utils: run()');
-
-        }]
-    )
-
-;
-
-angular.module('bricks.utils')
-    .filter('highlight', function () {
-        return function (text, search, caseSensitive) {
-            if (text && (search || angular.isNumber(search))) {
-                text = text.toString();
-                search = search.toString();
-                if (caseSensitive) {
-                    return text.split(search).join('<span class="bricks-highlight">' + search + '</span>');
-                } else {
-                    return text.replace(new RegExp(search, 'gi'), '<span class="bricks-highlight">$&</span>');
-                }
-            } else {
-                return text;
-            }
-        }
-    }
-);
-'use strict';
-
 angular.module('bricks.user',
         [
         ]
@@ -538,201 +538,6 @@ angular.module('bricks.user')
 ;
 'use strict';
 
-angular.module('bricks.search', [])
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_SEARCH', {
-        i18nPart: 'bricks/search'
-    })
-
-    .config(['MODULE_BRICKS_SEARCH',
-        function (MODULE_BRICKS_SEARCH) {
-        }]
-    )
-
-    .run(['MODULE_BRICKS_SEARCH', '$log',
-        function(MODULE_BRICKS_SEARCH, $log) {
-            $log.debug('bricks.search: run()');
-
-        }]
-    )
-
-;
-
-'use strict';
-
-angular.module('bricks.search')
-
-    .service('SearchService',
-        ['MODULE_BRICKS_SEARCH', '$log', '$rootScope', '$q', 'bricksAuthenticatedRestangularService', 'bricksPublicRestangularService',
-            function (MODULE_BRICKS_SEARCH, $log, $rootScope, $q, bricksAuthenticatedRestangularService, bricksPublicRestangularService) {
-
-                $log.debug('SearchService');
-
-
-                return {
-
-                }
-            }
-        ]
-    )
-;
-'use strict';
-
-angular.module('bricks.app.notification',
-        [
-        ]
-    )
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_APP_NOTIFICATION', {
-        i18nPart: 'services',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/notification/'
-    })
-
-    .config(['MODULE_BRICKS_APP_NOTIFICATION', '$translatePartialLoaderProvider',
-        function (MODULE_BRICKS_APP_NOTIFICATION,$translatePartialLoaderProvider) {
-            // load i18n translations from i18n subdirectory
-            // $translatePartialLoaderProvider.addPart(MODULE_BRICKS_APP_NOTIFICATION.i18nPart);
-        }]
-    )
-
-    .run(['MODULE_BRICKS_APP_NOTIFICATION','$translate','$log',
-        function(MODULE_BRICKS_APP_NOTIFICATION,$translate,$log) {
-            //$translate.refresh();
-
-            $log.debug('bricks.app.notification: run()');
-
-        }]
-    )
-
-;
-
-'use strict';
-
-angular.module('bricks.app.notification')
-
-    .service('NotificationService',
-        ['MODULE_BRICKS_APP_NOTIFICATION', '$log', '$rootScope', 'webNotification','$interval', '$translate', '$state', '$window',
-            function (MODULE_BRICKS_APP_NOTIFICATION, $log, $rootScope, webNotification, $interval, $translate, $state, $window) {
-
-                $log.debug('NotificationService');
-
-                function showNotification(alert,body,icon,sref,autoclose,url) {
-                    body = body || "";
-                    icon = icon || "/favicon.ico";
-                    sref = sref || null;
-                    autoclose = autoclose || 100000;
-                    url = url || null;
-                    $log.debug('NotificationService.showNotification',alert,body,icon,sref,autoclose,url);
-                    webNotification.showNotification(alert, {
-                        body: body,
-                        icon: icon,
-                        onClick: function onNotificationClicked() {
-                            $log.debug('NotificationService.showNotification: notification clicked');
-                            if (sref) {
-                                $log.debug('NotificationService.showNotification: going to sref',sref);
-                                $state.go(sref);
-                            } else if (url) {
-                                $log.debug('NotificationService.showNotification: going url',url);
-                                $window.open(url,'_blank');
-                            }
-                        },
-                        autoClose: autoclose
-                    }, function onShow(error, hide) {
-                        $log.debug('NotificationService.showNotification: onShow');
-                        if (error) {
-                            $log.error('NotificationService.showNotification: onShow with error',error);
-                            hide();
-                        } else {
-                            $log.debug('NotificationService.showNotification: onShow no error')
-                        }
-                    });
-                }
-
-                function showNotificationByKey(key,sref,autoclose) {
-                    showNotification(
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ALERT'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.BODY'),
-                        $translate.instant('BRICKS.APP.NOTIFICATION.'+key+'.ICON'),
-                        sref,
-                        autoclose
-                    );
-                }
-
-                // initialization
-
-                function initListeners() {
-                    $log.debug('NotificationService.initListeners');
-
-                    // login of user
-                    $rootScope.$on('user-logged-in',function() {
-                        $log.debug('NotificationService.$on user-logged-in');
-                        showNotificationByKey('USER_LOGGED_IN');
-                    });
-
-                    // logout of user
-                    $rootScope.$on('user-logged-out',function() {
-                        $log.debug('NotificationService.$on user-logged-out');
-                        showNotificationByKey('USER_LOGGED_OUT');
-                    });
-
-                    // message received via WAMP
-                    $rootScope.$on('wamp-message-received',function(event,args) {
-                        $log.debug('NotificationService.$on wamp-message-received',args);
-                        var topic = args.topic;
-                        if (topic == 'general' || topic == 'personal' || topic == 'group') {
-                            $log.debug('NotificationService.$on wamp-message-received: will show message as Desktop notification');
-                            var message = args.message;
-                            if (message && _.has(message,'text')) {
-                                var text = message.text;
-                                var body = null;
-                                var sref = null;
-                                var icon = null;
-                                var autoclose = 100000;
-                                var url = null;
-                                if (_.has(message,'custom')) {
-                                    if (_.has(message.custom, 'translation')) {
-                                        body = _.has(message.custom.translation,'body')?$translate.instant(messsage.custom.translation.body):null;
-                                        text = _.has(message.custom.translation,'text')?$translate.instant(messsage.custom.translation.text):null;
-                                        icon = _.has(message.custom.translation,'icon')?$translate.instant(messsage.custom.translation.icon):null;
-                                    }
-                                    if (!body) {
-                                        body = _.has(message.custom, 'body') ? message.custom.body : body;
-                                    }
-                                    if (!icon) {
-                                        icon = _.has(message.custom, 'icon') ? message.custom.icon : icon;
-                                    }
-                                    sref = _.has(message.custom, 'sref') ? message.custom.sref : sref;
-                                    autoclose = _.has(message.custom, 'autoclose') ? message.custom.autoclose : autclose;
-                                    url = _.has(message.custom, 'url') ? message.custom.url : url;
-                                }
-                                showNotification(text,body,icon,sref,autoclose,url);
-                            }
-                        } else {
-                            $log.debug('NotificationService.$on wamp-message-received: ignoring message');
-                        }
-                    })
-                }
-
-                function init() {
-                    $log.debug('NotificationService.init');
-                    initListeners();
-                }
-
-                // helpers
-
-                init();
-
-                // public interface
-                return {
-                    showNotification: showNotification
-                }
-            }
-        ])
-;
-'use strict';
-
 angular.module('bricks.newsletter',
         [
         ]
@@ -790,138 +595,6 @@ angular.module('bricks.newsletter')
                 }
             }
         ])
-;
-'use strict';
-
-angular.module('bricks.geolocation',
-        [
-        ]
-    )
-
-    // infrastructure configuration, primarily prefixes to keep DRY
-    .constant('MODULE_BRICKS_GEOLOCATION', {
-        i18nPart: 'bricks/geolocation',
-        templatePrefix: '/bundles/twentystepsbricksDemo/modules/bricks/geolocation/'
-    })
-
-    .run(['MODULE_BRICKS_GEOLOCATION', '$log',
-        function(MODULE_BRICKS_GEOLOCATION, $log) {
-            $log.debug('bricks.geolocation: run()');
-        }]
-    )
-
-;
-
-'use strict';
-
-angular.module('bricks.geolocation')
-
-    .service('GeolocationService',
-        ['MODULE_BRICKS_GEOLOCATION', '$log', '$rootScope', 'bricksPublicRestangularService', 'bricksAuthenticatedRestangularService', '$q', '$geolocation',
-            function (MODULE_BRICKS_GEOLOCATION, $log, $rootScope, bricksPublicRestangularService, bricksAuthenticatedRestangularService, $q, $geolocation) {
-
-                $log.debug('GeolocationService');
-
-                // best effort, combining browser based and ip based determinination of position with reverse geocoding
-                function get() {
-                    $log.debug('GeolocationService.get');
-                    var deferred = $q.defer();
-                    var restangularService = $rootScope.user?bricksAuthenticatedRestangularService:bricksPublicRestangularService;
-                    if (document.location.protocol=='https:') {
-                        $log.debug('GeolocationService.get: detected https origin, trying full geolocation');
-                        $geolocation.getCurrentPosition({
-                            timeout: 60000
-                        }).then(function (position) {
-                            $log.debug('GeolocationService.get: $geolocation succeeded', position);
-                            restangularService.one('geolocation/reverse.json').get({
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            }).then(function (result) {
-                                $log.debug('GeolocationService.get: reverse geocoding succeeded', result);
-                                deferred.resolve(result.data.location);
-                            }, function (error) {
-                                $log.error('GeolocationService.get: reverse geocoding failed', error);
-                                deferred.resolve({
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude
-                                });
-                            });
-                        }, function (error) {
-                            $log.warn('GeolocationService.get: $geolocation failed, trying reverse IP based geocoding', error);
-                            restangularService.one('geolocation/geoip.json').get().then(function (result) {
-                                $log.debug('GeolocationService.get: geoip succeeded', result);
-                                deferred.resolve(result.data.location);
-                            }, function (error) {
-                                $log.error('GeolocationService.get: geoip failed', error);
-                                deferred.reject(error);
-                            });
-                        });
-                    } else {
-                        $log.debug('GeolocationService.get: detected http origin, trying reverse IP based geocoding only');
-                        restangularService.one('geolocation/geoip.json').get().then(function (result) {
-                            $log.debug('GeolocationService.get: geoip  succeeded', result);
-                            deferred.resolve(result.data.location);
-                        }, function (error) {
-                            $log.error('GeolocationService.get: geoip failed', error);
-                            deferred.reject(error);
-                        });
-                    }
-                    return deferred.promise;
-                }
-
-
-                function reverse(lat,lng) {
-                    $log.debug('GeolocationService.reverse');
-                    var deferred = $q.defer();
-                    var restangularService = $rootScope.user?bricksAuthenticatedRestangularService:bricksPublicRestangularService;
-                    restangularService.one('geolocation/reverse.json').get({lat:lat, lng:lng}).then(function (result) {
-                        $log.debug('GeolocationService.reverse succeeded',result);
-                        deferred.resolve(result.data.location);
-                    }, function (error) {
-                        $log.error('GeolocationService.reverse failed', error);
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                function geoposition() {
-                    $log.debug('GeolocationService.geoposition');
-                    var deferred = $q.defer();
-                    $geolocation.getCurrentPosition({
-                        timeout: 60000
-                    }).then(function(position) {
-                        $log.debug('GeolocationService.geoposition succeeded',position);
-                        deferred.resolve(position);
-                    },function(error) {
-                        $log.error('GeolocationService.geoposition failed',error);
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                function geoip() {
-                    $log.debug('GeolocationService.geoip');
-                    var deferred = $q.defer();
-                    var restangularService = $rootScope.user?bricksAuthenticatedRestangularService:bricksPublicRestangularService;
-                    restangularService.one('geolocation/geoip.json').get().then(function (result) {
-                        $log.debug('GeolocationService.geoip succeeded',result);
-                        deferred.resolve(result.data.location);
-                    }, function (error) {
-                        $log.error('GeolocationService.geoip failed', error);
-                        deferred.reject(error);
-                    });
-                    return deferred.promise;
-                }
-
-                return {
-                    get: get,
-                    geoip: geoip,
-                    geoposition: geoposition,
-                    reverse: reverse
-                }
-            }
-        ]
-    )
 ;
 'use strict';
 
@@ -1101,14 +774,9 @@ angular.module('bricks.app',
         [
             'bricks.user',
             'bricks.app.admin',
-            'bricks.app.notification',
             'bricks.newsletter',
             'bricks.utils',
-            'bricks.wamp',
-            'bricks.geolocation',
-            'bricks.content',
-            'bricks.search',
-            'bricks.map'
+            'bricks.content'
         ]
     )
 
@@ -1125,11 +793,10 @@ angular.module('bricks.app',
         }]
     )
 
-    .run(['MODULE_BRICKS_APP','$translate','$log','NotificationService',
-        function(MODULE_BRICKS_APP,$translate,$log,NotificationService) {
+    .run(['MODULE_BRICKS_APP','$translate','$log',
+        function(MODULE_BRICKS_APP,$translate,$log) {
             //$translate.refresh();
             $log.debug('bricks.app: run()','0.1');
-
         }]
     )
 

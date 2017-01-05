@@ -4,14 +4,9 @@ angular.module('bricks.app',
         [
             'bricks.user',
             'bricks.app.admin',
-            'bricks.app.notification',
             'bricks.newsletter',
             'bricks.utils',
-            'bricks.wamp',
-            'bricks.geolocation',
-            'bricks.content',
-            'bricks.search',
-            'bricks.map'
+            'bricks.content'
         ]
     )
 
@@ -28,11 +23,10 @@ angular.module('bricks.app',
         }]
     )
 
-    .run(['MODULE_BRICKS_APP','$translate','$log','NotificationService',
-        function(MODULE_BRICKS_APP,$translate,$log,NotificationService) {
+    .run(['MODULE_BRICKS_APP','$translate','$log',
+        function(MODULE_BRICKS_APP,$translate,$log) {
             //$translate.refresh();
             $log.debug('bricks.app: run()','0.1');
-
         }]
     )
 
