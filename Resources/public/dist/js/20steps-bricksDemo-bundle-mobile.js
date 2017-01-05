@@ -687,6 +687,59 @@ angular.module('bricks.notification')
 ;
 'use strict';
 
+angular.module('bricks.event', [])
+
+	// infrastructure configuration, primarily prefixes to keep DRY
+    .constant('MODULE_BRICKS_EVENT', {
+        i18nPart: 'bricks/event'
+    })
+
+	.config(['MODULE_BRICKS_EVENT','$translatePartialLoaderProvider','$stateProvider',
+        function (MODULE_BRICKS_EVENT,$translatePartialLoaderProvider, $stateProvider) {
+        // load i18n translations from i18n subdirectory
+        //$translatePartialLoaderProvider.addPart(MODULE_BRICKS_EVENT.i18nPart);
+
+    }])
+
+    .run(['MODULE_BRICKS_EVENT','$translate',
+        function(MODULE_BRICKS_EVENT,$translate) {
+    	//$translate.refresh();
+    }])
+;
+'use strict';
+
+angular.module('bricks.event')
+    .service('EventService',
+        ['MODULE_BRICKS_EVENT', '$log', '$translate', 'bricksPublicRestangularService', '$q', 'bricksContentService',
+            function (MODULE_BRICKS_EVENT, $log, $translate, bricksPublicRestangularService, $q, bricksContentService) {
+
+                $log.debug('EventService');
+
+                function getList() {
+                    $log.debug('EventService.getList');
+
+                    var deferred = $q.defer();
+                    bricksPublicRestangularService.one('event/event.json').get(context).then(function(result) {
+                        $log.debug('EventService.getList succeeded: ', result);
+                        var page = result.data.page;
+                        deferred.resolve(page);
+                    }, function (error) {
+                        $log.error('EventService.getList failed: ', error);
+                        deferred.reject(error);
+                    }).finally(function() {
+                    });
+                    return deferred.promise;
+                }
+
+                return {
+                    getList: getList
+                }
+            }
+        ]
+    )
+;
+'use strict';
+
 angular.module('bricks.content', [])
 
 	// infrastructure configuration, primarily prefixes to keep DRY
