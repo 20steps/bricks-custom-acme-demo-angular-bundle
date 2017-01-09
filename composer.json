@@ -1,5 +1,5 @@
 {
-    "name": "20steps/bricks-demo-angularjs",
+    "name": "20steps/bricks-custom-acme-demo-angular-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle for demo application.",
     "keywords": ["Symfony2", "Bricks", "AngularJs"],
